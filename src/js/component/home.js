@@ -23,7 +23,7 @@ export function Home() {
 	};
 
 	return (
-		<div className="container-fluid mt-5 p-5 w-50 shadow rounded">
+		<div className="container-fluid mt-5 p-5 w-50 shadow rounded bg-light">
 			<div className="m-auto w-75 pb-4">
 				<p className="w-75 m-auto text-center display-4">To-Do List</p>
 			</div>
@@ -50,16 +50,16 @@ export function Home() {
 				</div>
 			</div>
 			<div className="row m-auto w-75">
-				<div className="col-12 my-3">
+				<div className="col-12 my-3 w-100 p-0">
 					{tasks.map((item, index) => {
 						return (
 							<React.Fragment key={index}>
-								<li className="d-flex justify-content-between py-3 border-bottom">
+								<li className="d-flex justify-content-between text-wrap py-3 px-4 border-bottom task">
 									{item}
 									<span>
 										<i
 											onClick={() => deleteTasks(index)}
-											className="far fa-trash-alt text-danger"></i>
+											className="far fa-trash-alt text-danger "></i>
 									</span>
 								</li>
 							</React.Fragment>
