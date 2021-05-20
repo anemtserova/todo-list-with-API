@@ -23,9 +23,9 @@ export function Home() {
 	};
 
 	return (
-		<div className="container-fluid mt-5">
-			<div className="m-auto w-75 ">
-				<h1 className="w-50 m-auto text-center">To-Do List</h1>
+		<div className="container-fluid mt-5 p-5 w-50 shadow rounded">
+			<div className="m-auto w-75 pb-4">
+				<p className="w-75 m-auto text-center display-4">To-Do List</p>
 			</div>
 			<div className="input-group m-auto w-75">
 				<input
@@ -39,7 +39,7 @@ export function Home() {
 				/>
 				<div className="input-group-append">
 					<button
-						className="btn btn-outline-secondary"
+						className="btn btn-outline-success"
 						type="button"
 						id="button-addon2"
 						onClick={() => {
@@ -54,12 +54,12 @@ export function Home() {
 					{tasks.map((item, index) => {
 						return (
 							<React.Fragment key={index}>
-								<li className="d-flex justify-content-between">
+								<li className="d-flex justify-content-between py-3 border-bottom">
 									{item}
 									<span>
 										<i
 											onClick={() => deleteTasks(index)}
-											className="far fa-trash-alt"></i>
+											className="far fa-trash-alt text-danger"></i>
 									</span>
 								</li>
 							</React.Fragment>
