@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //create your first component
 export function Home() {
 	const [tasks, setTasks] = useState([]);
 	const [inputTask, setInputTask] = useState("");
+	useEffect(() => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya")
+			.then(resp => {
+				if (!resp.ok) {
+					throw Error(resp.statusText);
+				}
+				return resp.json();
+			})
+			.then(data => {
+				setTasks(data);
+			})
+			.catch(error => {
+				//error handling
+				console.log(error);
+			});
+	}, []);
 
 	const addTask = input => {
 		if (inputTask) {
