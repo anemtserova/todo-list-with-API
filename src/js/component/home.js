@@ -7,7 +7,12 @@ export function Home() {
 
 	const addTask = input => {
 		if (inputTask) {
-			setTasks([...tasks, input]);
+			setTasks(
+				tasks.concat({
+					label: input,
+					done: false
+				})
+			);
 			setInputTask("");
 		} else alert("Write a task to add.");
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya", {
@@ -84,7 +89,7 @@ export function Home() {
 						return (
 							<React.Fragment key={index}>
 								<li className="d-flex justify-content-between text-wrap py-3 px-4 border-bottom task">
-									{item}
+									{item["label"]}
 									<span>
 										<i
 											onClick={() => deleteTasks(index)}
