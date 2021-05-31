@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 export function Home() {
 	const [tasks, setTasks] = useState([]);
 	const [inputTask, setInputTask] = useState("");
+
+	//useEffect() is used to change the list in the backend so when page reloads the task list doesn't get deleted
 	useEffect(() => {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya")
 			.then(resp => {
@@ -22,15 +24,15 @@ export function Home() {
 	}, []);
 
 	const addTask = input => {
-		if (inputTask) {
-			setTasks(
-				tasks.concat({
-					label: input,
-					done: false
-				})
-			);
-			setInputTask("");
-		} else alert("Write a task to add.");
+		// if (inputTask) {
+		// 	setTasks(
+		// 		tasks.concat({
+		// 			label: input,
+		// 			done: false
+		// 		})
+		// 	);
+
+		//} else alert("Write a task to add.");
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya", {
 			method: "PUT",
 			body: JSON.stringify(
@@ -51,11 +53,28 @@ export function Home() {
 			})
 			.then(data => {
 				console.log(data); //this will print on the console the exact object received from the server
+				fetch(
+					"https://assets.breatheco.de/apis/fake/todos/user/antoniya"
+				)
+					.then(resp => {
+						if (!resp.ok) {
+							throw Error(resp.statusText);
+						}
+						return resp.json();
+					})
+					.then(data => {
+						setTasks(data);
+					})
+					.catch(error => {
+						//error handling
+						console.log(error);
+					});
 			})
 			.catch(error => {
 				//error handling
 				console.log(error);
 			});
+		setInputTask("");
 	};
 
 	const deleteTasks = delTaskIndex => {
@@ -84,9 +103,30 @@ export function Home() {
 
 	const markDone = indexDone => {
 		let tasksMarkedDone = tasks.map((item, i) => {
-			if (i == indexDone) item.done = !item.done;
-			else item;
+			if (i == indexDone) {
+				item.done = !item.done;
+				return item;
+			} else item;
 		});
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya", {
+			method: "PUT",
+			body: JSON.stringify(tasksMarkedDone),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(resp => {
+				if (!resp.ok) {
+					throw Error(resp.statusText);
+				}
+				return resp.json();
+			})
+			.then(data => {
+				console.log(data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
 		setTasks(tasksMarkedDone);
 	};
 
@@ -128,11 +168,16 @@ export function Home() {
 						return (
 							<React.Fragment key={index}>
 								<li className="d-flex justify-content-between text-wrap py-3 px-4 border-bottom task">
-									{item["label"]}
+									{item["label"]}{" "}
+									{item.done ? ">> done" : ">> not done yet"}
 									<span>
 										<i
 											onClick={() => markDone(index)}
-											className="far fa-check-circle done"></i>{" "}
+											className={`${
+												item.done
+													? "far fa-check-circle done-task"
+													: "far fa-check-circle"
+											}`}></i>{" "}
 										<i
 											onClick={() => deleteTasks(index)}
 											className="far fa-trash-alt delete"></i>
