@@ -47,13 +47,9 @@ export function Home() {
 				if (!resp.ok) {
 					throw Error(resp.statusText);
 				}
-				// console.log(resp.ok); // will be true if the response is successfull
-				// console.log(resp.status); // the status code = 200 or code = 400 etc.
-				// console.log(resp.text()); // will try return the exact result as string
 				return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
 			})
 			.then(data => {
-				//here is were your code should start after the fetch finishes
 				console.log(data); //this will print on the console the exact object received from the server
 			})
 			.catch(error => {
@@ -64,7 +60,34 @@ export function Home() {
 
 	const deleteTasks = delTaskIndex => {
 		let newTaskList = tasks.filter((value, i) => i != delTaskIndex);
-		return setTasks(newTaskList);
+		setTasks(newTaskList);
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya", {
+			method: "PUT",
+			body: JSON.stringify(newTaskList),
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(resp => {
+				if (!resp.ok) {
+					throw Error(resp.statusText);
+				}
+				return resp.json();
+			})
+			.then(data => {
+				console.log(data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	};
+
+	const markDone = indexDone => {
+		let tasksMarkedDone = tasks.map((item, i) => {
+			if (i == indexDone) item.done = !item.done;
+			else item;
+		});
+		setTasks(tasksMarkedDone);
 	};
 
 	const displayNumberOfTasks = list => {
@@ -108,8 +131,11 @@ export function Home() {
 									{item["label"]}
 									<span>
 										<i
+											onClick={() => markDone(index)}
+											className="far fa-check-circle done"></i>{" "}
+										<i
 											onClick={() => deleteTasks(index)}
-											className="far fa-trash-alt text-danger "></i>
+											className="far fa-trash-alt delete"></i>
 									</span>
 								</li>
 							</React.Fragment>
