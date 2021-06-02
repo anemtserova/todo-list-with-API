@@ -105,6 +105,7 @@ export function Home() {
 		let tasksMarkedDone = tasks.map((item, i) => {
 			if (i == indexDone) {
 				item.done = !item.done;
+				console.log(item);
 				return item;
 			} else item;
 		});
@@ -165,11 +166,14 @@ export function Home() {
 			<div className="row m-auto w-75">
 				<div className="col-12 my-3 w-100 p-0">
 					{tasks.map((item, index) => {
+						console.log(item);
 						return (
 							<React.Fragment key={index}>
 								<li className="d-flex justify-content-between text-wrap py-3 px-4 border-bottom task">
-									{item["label"]}{" "}
-									{item.done ? ">> done" : ">> not done yet"}
+									{item.label}
+									{item.done
+										? " >> done"
+										: " >> not done yet"}
 									<span>
 										<i
 											onClick={() => markDone(index)}
