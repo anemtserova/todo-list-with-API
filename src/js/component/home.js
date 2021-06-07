@@ -63,6 +63,7 @@ export function Home() {
 						return resp.json();
 					})
 					.then(data => {
+						console.log("This is data from fetch: ", data);
 						setTasks(data);
 					})
 					.catch(error => {
@@ -105,10 +106,12 @@ export function Home() {
 		let tasksMarkedDone = tasks.map((item, i) => {
 			if (i == indexDone) {
 				item.done = !item.done;
-				console.log(item);
+				//console.log("Item from markDone: ", item);
 				return item;
-			} else item;
+			}
+			return item;
 		});
+		console.log("tasksMarkedDone:", tasksMarkedDone);
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/antoniya", {
 			method: "PUT",
 			body: JSON.stringify(tasksMarkedDone),
@@ -131,10 +134,10 @@ export function Home() {
 		setTasks(tasksMarkedDone);
 	};
 
-	const displayNumberOfTasks = list => {
-		let tasksLeft = list.length;
-		return tasksLeft;
-	};
+	// const displayNumberOfTasks = list => {
+	// 	let tasksLeft = list.length;
+	// 	return tasksLeft;
+	// };
 
 	return (
 		<div className="container-fluid mt-5 p-5 w-50 shadow rounded bg-light">
